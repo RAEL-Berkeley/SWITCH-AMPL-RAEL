@@ -1462,8 +1462,67 @@ minimize Transmission_Use:
 
 ############## CONSTRAINTS ##############
 
+###### Update installed generators by 2020 to current pool in the WECC #######
+# In the usual training set, p=2016 represents period 2020 because it goes from 2016-2025
+
+# Solar update:
+subject to Solar_update_lower { p in PERIODS: p  = 2016 }:
+  sum { (pid, a, t, p) in PROJECT_VINTAGES: t in SOLAR_TECHNOLOGIES}
+     Installed_To_Date[pid, a, t, p]
+     >= 23000;
+     
+subject to Solar_update_upper { p in PERIODS: p  = 2016 }:
+  sum { (pid, a, t, p) in PROJECT_VINTAGES: t in SOLAR_TECHNOLOGIES}
+     Installed_To_Date[pid, a, t, p]
+     <= 24000;
+
+# Wind update:
+subject to Wind_update_lower { p in PERIODS: p  = 2016 }:
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Wind'}
+     Installed_To_Date[pid, a, t, p]
+     >= 26000;     
+
+# Wind update:
+subject to Wind_update_upper { p in PERIODS: p  = 2016 }:
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Wind'}
+     Installed_To_Date[pid, a, t, p]
+     <= 26500;    
+
+
+# Gas update:
+subject to Gas_update_lower { p in PERIODS: p  = 2016 }:
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Gas'}
+     Installed_To_Date[pid, a, t, p]
+     >= 99500;     
+
+# Gas update:
+subject to Gas_update_upper { p in PERIODS: p  = 2016 }:
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Gas'}
+     Installed_To_Date[pid, a, t, p]
+     <= 99700;  
+     
+# Coal update:
+subject to Coal_update_lower { p in PERIODS: p  = 2016 }:
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Coal'}
+     Installed_To_Date[pid, a, t, p]
+     >= 36500;     
+
+# Coal update:
+subject to Coal_update_upper { p in PERIODS: p  = 2016 }:
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Coal'}
+     Installed_To_Date[pid, a, t, p]
+     <= 36570;  
+     
+          
 ###### Policy Constraints #######
 
+# Meet CA storage mandate. Paty
+subject to Meet_California_Storage_Mandate { p in PERIODS: p + num_years_per_period/2 >= 2020 }:
+  sum { (pid, a, t, p) in PROJECT_VINTAGES: fuel[t] = 'Storage' and primary_state[a] = 'CA' }
+     Installed_To_Date[pid, a, t, p]
+     >= 1325;
+     
+     
 # RPS constraint
 # load.run will drop this constraint if enable_rps is 0
 subject to Satisfy_Primary_RPS { (r, c, p) in RPS_TARGETS: c = 'Primary' }:
@@ -2148,6 +2207,8 @@ problem Investment_Cost_Minimization:
 	Satisfy_Primary_RPS, Satisfy_Distributed_RPS, Meet_California_Solar_Initiative, Meet_California_Distributed_Generation_Mandate, 
 	Carbon_Cap,
 	ConsumeREC, Conservation_of_REC,
+	Solar_update_lower, Solar_update_upper, Wind_update_lower, Wind_update_upper, Gas_update_upper, Gas_update_lower, Coal_update_upper, Coal_update_lower,
+  	Meet_California_Storage_Mandate,
   # Investment Decisions
 	InstallGen, InstallStorageEnergyCapacity, BuildGenOrNot, InstallTrans, InstallLocalTD,
   # Installation Constraints
