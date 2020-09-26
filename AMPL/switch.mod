@@ -1467,50 +1467,50 @@ minimize Transmission_Use:
 
 # Solar update:
 subject to Solar_update_lower { p in PERIODS: p  = 2016 }:
-  sum { (pid, a, t, p) in PROJECT_VINTAGES: t in SOLAR_TECHNOLOGIES}
-     Installed_To_Date[pid, a, t, p] + ep_capacity_mw[pid, a, t]
+  sum { (pid, a, t, p) in PROJECT_VINTAGES: t in SOLAR_TECHNOLOGIES} Installed_To_Date[pid, a, t, p] 
+  + sum { (pid, a, t, p) in EP_PERIODS: t in SOLAR_TECHNOLOGIES} ep_capacity_mw[pid, a, t]
      >= 23750;
      
 subject to Solar_update_upper { p in PERIODS: p  = 2016 }:
-  sum { (pid, a, t, p) in PROJECT_VINTAGES: t in SOLAR_TECHNOLOGIES}
-     Installed_To_Date[pid, a, t, p] + ep_capacity_mw[pid, a, t]
+  sum { (pid, a, t, p) in PROJECT_VINTAGES: t in SOLAR_TECHNOLOGIES} Installed_To_Date[pid, a, t, p] 
+     + sum { (pid, a, t, p) in EP_PERIODS: t in SOLAR_TECHNOLOGIES} ep_capacity_mw[pid, a, t]
      <= 24000;
 
 # Wind update:
 subject to Wind_update_lower { p in PERIODS: p  = 2016 }:
-  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Wind'}
-     Installed_To_Date[pid, a, t, p] + ep_capacity_mw[pid, a, t]
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Wind'} Installed_To_Date[pid, a, t, p] 
+  + sum { (pid, a, t, p) in EP_PERIODS:  fuel[t] = 'Wind'} ep_capacity_mw[pid, a, t]
      >= 26150;     
 
 # Wind update:
 subject to Wind_update_upper { p in PERIODS: p  = 2016 }:
-  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Wind'}
-     Installed_To_Date[pid, a, t, p] + ep_capacity_mw[pid, a, t]
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Wind'} Installed_To_Date[pid, a, t, p] 
+  + sum { (pid, a, t, p) in EP_PERIODS:  fuel[t] = 'Wind'} ep_capacity_mw[pid, a, t]
      <= 26500;    
 
 
 # Gas update:
 subject to Gas_update_lower { p in PERIODS: p  = 2016 }:
-  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Gas'}
-     Installed_To_Date[pid, a, t, p] + ep_capacity_mw[pid, a, t]
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Gas'} Installed_To_Date[pid, a, t, p] 
+  + sum { (pid, a, t, p) in EP_PERIODS:  fuel[t] = 'Gas'} ep_capacity_mw[pid, a, t]
      >= 99600;     
 
 # Gas update:
 subject to Gas_update_upper { p in PERIODS: p  = 2016 }:
-  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Gas'}
-     Installed_To_Date[pid, a, t, p] + ep_capacity_mw[pid, a, t]
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Gas'} Installed_To_Date[pid, a, t, p] 
+  + sum { (pid, a, t, p) in EP_PERIODS:  fuel[t] = 'Gas'} ep_capacity_mw[pid, a, t]
      <= 99700;  
      
 # Coal update:
 subject to Coal_update_lower { p in PERIODS: p  = 2016 }:
-  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Coal'}
-     Installed_To_Date[pid, a, t, p] + ep_capacity_mw[pid, a, t]
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Coal'} Installed_To_Date[pid, a, t, p] 
+  + sum { (pid, a, t, p) in EP_PERIODS:  fuel[t] = 'Coal'} ep_capacity_mw[pid, a, t]
      >= 36500;     
 
 # Coal update:
 subject to Coal_update_upper { p in PERIODS: p  = 2016 }:
-  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Coal'}
-     Installed_To_Date[pid, a, t, p] + ep_capacity_mw[pid, a, t]
+  sum { (pid, a, t, p) in PROJECT_VINTAGES:  fuel[t] = 'Coal'} Installed_To_Date[pid, a, t, p] 
+  + sum { (pid, a, t, p) in EP_PERIODS:  fuel[t] = 'Coal'} ep_capacity_mw[pid, a, t]
      <= 36570;  
      
           
